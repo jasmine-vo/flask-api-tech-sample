@@ -2,22 +2,28 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/test', methods=["POST", "GET"])
+@app.route('/test', methods=["POST"])
 def test():
     """Takes in two numbers as arguments and returns the sum in JSON format"""
 
-    if request.method == "POST":
-        json_request = request.get_json()
+    json_request = request.get_json()
 
-        x = json_request.get("x")
-        y = json_request.get("y")
+    x = json_request.get("x")
+    y = json_request.get("y")
 
-        response = {"sum": x + y}
-
-    else:
-        response = {"message": "The method is not allowed for the requested URL."}
+    response = {"sum": x + y}
 
     return jsonify(response)
+
+
+@app.errorhandler(405)
+def handle_invalid_request(error):
+    """If request is not allowed, returns error message in JSON format"""
+    
+    response = {"message": "The method is not allowed for the requested URL."}
+
+    return jsonify(response)
+
 
 @app.errorhandler(400)
 def handle_invalid_usage(error):
