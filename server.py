@@ -19,5 +19,13 @@ def test():
 
     return jsonify(response)
 
+@app.errorhandler(400)
+def handle_invalid_usage(error):
+    """If there is a bad request, returns error message in JSON format"""
+
+    response = {"message": "The browser (or proxy) sent a request that this server could not understand."}
+
+    return jsonify(response)
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000, host='0.0.0.0')
